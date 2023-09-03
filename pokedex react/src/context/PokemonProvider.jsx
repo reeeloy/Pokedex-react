@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { PokemonContext } from "./PokemonContext";
 import { useForm } from "../hook/useForm";
+import { PokemonContext } from "./PokemonContext";
 
 export const PokemonProvider = ({children}) => {
     const [allPokemons, setAllPokemons] = useState([]);
@@ -8,7 +8,7 @@ export const PokemonProvider = ({children}) => {
     const [offset, setOffset] = useState(0);
 
     // Utilizar CustomHook - useForm
-    const { ValueSearch, onInputChange, onResetForm } = useForm({
+    const { valueSearch, onInputChange, onResetForm } = useForm({
         valueSearch: '',
     });
 
@@ -25,7 +25,7 @@ export const PokemonProvider = ({children}) => {
         );
         const data = await res.json();
         
-        const promises = data.results.map(async(pokemon) => {
+        const promises = data.results.map(async pokemon => {
             const res = await fetch (pokemon.url);
             const data = await res.json();
             return data;
@@ -47,32 +47,31 @@ export const PokemonProvider = ({children}) => {
         const data = await res.json();
         
         const promises = data.results.map(async(pokemon) => {
-            const res = await fetch(pokemon.url)
-            const data = await res.json()
-            return data
+            const res = await fetch(pokemon.url);
+            const data = await res.json();
+            return data;
         })
         const results = await Promise.all(promises)
 
-        setGlobalPokemons(results)
-        setLoading(false)
-    };
+        setGlobalPokemons(results);
+        setLoading(false);
     
     // Llamar a un pokemon por ID
     const getPokemonByID = async(id) => {
         const baseURL = 'https://pokeapi.co/api/v2/'
 
-        const res = await fetch(`${baseURL}pokemon/${id}`)
-        const data = await res.json()
-        return data
+        const res = await fetch(`${baseURL}pokemon/${id}`);
+        const data = await res.json();
+        return data;
     }
 
     useEffect (() => {
-        getAllPokemons()
-    }, [])
+        getAllPokemons();
+    }, []);
 
     useEffect (() => {
-        getGlobalPokemons()
-    }, [])
+        getGlobalPokemons();
+    }, []);
 
 
     
